@@ -1,11 +1,10 @@
 {
   "version": 2,
-  "routes": [
-    { "src": "/php/(.*)", "dest": "/php/$1" },
-    { "src": "/(.*)", "dest": "/index.php" }
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.php" }
   ],
   "functions": {
     "index.php": { "runtime": "vercel-php@0.7.2" },
-    "php/*.php": { "runtime": "vercel-php@0.7.2" }
+    "*.php": { "runtime": "vercel-php@0.7.2" }
   }
 }
