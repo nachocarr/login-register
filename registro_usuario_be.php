@@ -9,12 +9,15 @@ $password = getenv('password');
 $dbname = getenv('dbname');
 $port = (int)getenv('PORT');
 
-// Conectar a la base de datos de Aiven usando el puerto
-$conexion = mysqli_connect($host, $user, $password, $dbname, $port);
-
-if (!$conexion) {
+// Conectar a la base de datos de Aiven usando PDO (compatible con entornos serverless)
+try {
+    $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+    $conexion = new PDO($dsn, $user, $password);
+    // Configurar PDO para que maneje los errores mediante excepciones
+    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
     echo "<h2 style='color:red;'>Error al conectar a la base de datos:</h2>";
-    echo "<pre>" . mysqli_connect_error() . "</pre>";
+    echo "<pre>" . $e->getMessage() . "</pre>";
     exit();
 }
 
@@ -27,18 +30,27 @@ $contrasena = $_POST['contrasena'] ?? '';
 // Encriptar la contraseña con SHA512
 $contrasena = hash('sha512', $contrasena);
 
-// Insertar en la base de datos
-$query = "INSERT INTO usuarios(nombre_completo, correo, usuario, contrasena) VALUES('$nombre_completo', '$correo', '$usuario', '$contrasena')";
-$ejecutar = mysqli_query($conexion, $query);
+try {
+    // Insertar en la base de datos de forma segura usando consultas preparadas
+    $query = "INSERT INTO usuarios (nombre_completo, correo, usuario, contrasena) VALUES (:nombre, :correo, :usuario, :contrasena)";
+    $stmt = $conexion->prepare($query);
+    
+    $ejecutar = $stmt->execute([
+        ':nombre' => $nombre_completo,
+        ':correo' => $correo,
+        ':usuario' => $usuario,
+        ':contrasena' => $contrasena
+    ]);
 
-if($ejecutar){
-    echo '
-        <script>
-            alert("Usuario almacenado con éxito");
-            window.location = "index.php";
-        </script>
-    ';
-} else {
+    if($ejecutar){
+        echo '
+            <script>
+                alert("Usuario almacenado con éxito");
+                window.location = "index.php";
+            </script>
+        ';
+    }
+} catch (Exception $e) {
     echo '
         <script>
             alert("Inténtelo de nuevo, usuario no almacenado");
@@ -47,5 +59,6 @@ if($ejecutar){
     ';
 }
 
-mysqli_close($conexion);
+// Cerrar la conexión PDO
+$conexion = null;
 ?>

@@ -9,18 +9,22 @@ $password = getenv('password');
 $dbname = getenv('dbname');
 $port = (int)getenv('PORT');
 
-// Inicializar MySQLi con soporte SSL para Aiven
-$conexion = mysqli_init();
+try {
+    $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+    
+    // Opciones para mantener la conexión segura SSL que exige Aiven
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        // Evita problemas con el certificado SSL autofirmado de Aiven en entornos cloud
+        PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
+    ];
 
-// Configurar opciones de SSL para evitar bloqueos por certificados en la nube
-mysqli_ssl_set($conexion, NULL, NULL, NULL, NULL, NULL);
-mysqli_options($conexion, MYSQLI_OPT_CONNECT_TIMEOUT, 10);
+    // Intentar la conexión real utilizando PDO con SSL
+    $conexion = new PDO($dsn, $user, $password, $options);
 
-// Intentar la conexión real utilizando el puerto y SSL
-$conex_exitosas = mysqli_real_connect($conexion, $host, $user, $password, $dbname, $port, NULL, MYSQLI_CLIENT_SSL);
-
-if (!$conex_exitosas) {
-    // Si falla, mostramos el error exacto en pantalla en lugar del Error 500
-    die("<h3 style='color:red;'>Error de conexión SSL con Aiven:</h3> " . mysqli_connect_error());
+} catch (PDOException $e) {
+    // Si falla, mostramos el error exacto en pantalla en lugar de un Error 500
+    die("<h3 style='color:red;'>Error de conexión SSL con Aiven:</h3> " . $e->getMessage());
 }
 ?>

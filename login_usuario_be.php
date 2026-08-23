@@ -1,30 +1,18 @@
-<?php 
+<?php
+// Obtener las credenciales de las variables de entorno de Railway
+$host = getenv('host');
+$user = getenv('user');
+$password = getenv('password');
+$dbname = getenv('dbname');
+$port = (int)getenv('PORT');
 
-        session_start();
-
-        include 'conexion-be.php';
-
-        $correo = $_POST ['correo'];
-        $contrasena = $_POST['contrasena'];
-        $contrasena = hash('sha512', $contrasena);
-
-        $validar_login = mysqli_query($conexion, "SELECT * FROM usuarios WHERE correo = '$correo' and contrasena='$contrasena'");
-
-        if(mysqli_num_rows($validar_login) > 0){
-
-        $_SESSION['usuario']= $correo;
-        header("location: bienvenido.php");
-
-        }else{
-
-        echo '
-        
-            <script>
-                alert("Usuario no existe, por favor verifique los datos introducidos")
-                window.location ="../index.php";
-            
-            </script>
-        ';
-
-        }
+try {
+    $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+    $conexion = new PDO($dsn, $user, $password);
+    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    echo "<h2 style='color:red;'>Error al conectar a la base de datos:</h2>";
+    echo "<pre>" . $e->getMessage() . "</pre>";
+    exit();
+}
 ?>
