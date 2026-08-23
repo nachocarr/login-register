@@ -1,6 +1,7 @@
 {
   "version": 2,
   "rewrites": [
+    { "source": "/php/(.*)", "destination": "/php/$1" },
     { "source": "/(.*)", "destination": "/index.php" }
   ],
   "functions": {
