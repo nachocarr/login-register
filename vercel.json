@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/php/(.*)", "destination": "/php/$1" },
-    { "source": "/(.*)", "destination": "/index.php" }
+  "routes": [
+    { "src": "/php/(.*)", "dest": "/php/$1" },
+    { "src": "/(.*)", "dest": "/index.php" }
   ],
   "functions": {
     "index.php": { "runtime": "vercel-php@0.7.2" },
