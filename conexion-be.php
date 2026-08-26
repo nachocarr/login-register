@@ -7,7 +7,7 @@ $host = getenv('host') ?: getenv('HOST');
 $user = getenv('user') ?: getenv('USER');
 $password = getenv('password') ?: getenv('PASSWORD');
 $dbname = getenv('dbname') ?: getenv('DBNAME');
-$port = (int)(getenv('DB_PORT') ?: getenv('PORT'))
+$port = (int)(getenv('DB_PORT') ?: getenv('PORT'));
 try {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
     
