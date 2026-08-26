@@ -3,11 +3,11 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-$host = getenv('host');
-$user = getenv('user');
-$password = getenv('password');
-$dbname = getenv('dbname');
-$port = (int)getenv('DB_PORT');
+$host = getenv('host') ?: getenv('HOST');
+$user = getenv('user') ?: getenv('USER');
+$password = getenv('password') ?: getenv('PASSWORD');
+$dbname = getenv('dbname') ?: getenv('DBNAME');
+$port = (int)(getenv('DB_PORT') ?: getenv('PORT'))
 try {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
     
