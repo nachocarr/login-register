@@ -39,14 +39,14 @@
             <!--Formulario de login y registro-->
             <div class="contenedor__login-register">
                 <!--Formulario de login -->
-                <form action="/login_usuario_be.php" class="formulario__login" method="POST">
+                <form action="login_usuario_be.php" class="formulario__login" method="POST">
                     <h2>Iniciar sesion</h2>
                     <input type="text" placeholder="Correo Electronico" name="correo">
                     <input type="password" placeholder="Contraseña" name="contrasena">
                     <button>Entrar</button>
                 </form>
                 <!--Formulario de registro-->
-                <form action="/registro_usuario_be.php" class="formulario__register" method="POST">
+                <form action="/login-register/registro_usuario_be.php" class="formulario__register" method="POST">
                     <h2>Regístrate</h2>
                     <input type="text" placeholder="Nombre completo" name="nombre_completo">
                     <input type="text" placeholder="Correo electronico" name="correo">
