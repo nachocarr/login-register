@@ -2,14 +2,14 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Obtener las credenciales de las variables de entorno de Railway
-$host = getenv('host');
-$user = getenv('user');
-$password = getenv('password');
-$dbname = getenv('dbname');
-$port = (int)getenv('PORT');
+// Credenciales directas de InfinityFree
+$host = 'sql302.infinityfree.com';
+$port = '3306';
+$user = 'if0_42757151';
+$password = 'IqHaQK6qJHo'; // Tu contraseña actual del panel
+$dbname = 'if0_42757151_login_register';
 
-// Conectar a la base de datos de Aiven usando PDO (compatible con entornos serverless)
+// Conectar a la base de datos usando PDO
 try {
     $dsn = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
     $conexion = new PDO($dsn, $user, $password);
